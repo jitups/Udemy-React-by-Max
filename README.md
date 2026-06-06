@@ -1,4 +1,7 @@
 # React + TypeScript + Vite
+Based on training material from 
+https://hexaware.udemy.com/course/react-the-complete-guide-incl-redux/
+
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 

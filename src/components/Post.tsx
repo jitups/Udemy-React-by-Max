@@ -1,10 +1,10 @@
-import styles from './Post.module.css';
+import classes from './Post.module.css';
 
 function Post(props) {
   return (
-    <div className={styles.post}>
-      <p className={styles.author}>{props.author}</p>
-      <p className={styles.text}>{props.body}</p>
+    <div className={classes.post}>
+      <p className={classes.author}>{props.author}</p>
+      <p className={classes.text}>{props.body}</p>
     </div>
   );
 }

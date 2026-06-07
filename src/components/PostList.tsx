@@ -1,4 +1,4 @@
-import { useState } from 'react'; 
+import { useState, useEffect } from 'react'; 
 
 import Post from './Post';
 import NewPost from './NewPost';
@@ -8,13 +8,29 @@ import classes from './PostList.module.css';
 
 function PostList({isPosting, onStopPosting}) {
   console.log(isPosting);
-  const [isModalVisible,setIsModalVisible] = useState(isPosting);
   const [posts, setPosts] = useState([]);
+
+  useEffect(() => {
+    fetch('http://localhost:8080/posts')
+      .then((response) => response.json())
+      .then((data) => {
+        setPosts(data.posts);
+      });
+  }, []);
 
   function addPostHandler(postData){
     // need to add this code in this format, since new data is depends on old data
-    console.log('in PostList -> addPostHandler');
-    setPosts((existingPosts) => [postData, ... existingPosts]); 
+    fetch('http://localhost:8080/posts', {
+      method: 'POST',
+      body: JSON.stringify(postData),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    .then((response) => {
+      console.log('in PostList -> addPostHandler');
+      setPosts((existingPosts) => [postData, ... existingPosts]);
+    });
   }
 
   return (

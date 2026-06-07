@@ -1,25 +1,34 @@
-import {useState} from 'react';
+import { useState } from 'react'; 
+
 import Post from './Post';
 import NewPost from './NewPost';
+import Modal from './Modal';
+
 import classes from './PostList.module.css';
 
-function PostList() {
-  const [enteredBody,setEnteredBody] = useState('');
-  const [enteredAuthor,setEnteredAuthor] = useState('');
-  function bodyChangeHandler(event){
-      setEnteredBody(event.target.value);
-  }
+function PostList({isPosting, onStopPosting}) {
+  console.log(isPosting);
+  const [isModalVisible,setIsModalVisible] = useState(isPosting);
+  const [posts, setPosts] = useState([]);
 
-  function authorChangeHandler(event){
-    setEnteredAuthor(event.target.value);
+  function addPostHandler(postData){
+    // need to add this code in this format, since new data is depends on old data
+    console.log('in PostList -> addPostHandler');
+    setPosts((existingPosts) => [postData, ... existingPosts]); 
   }
 
   return (
     <>
-      <NewPost onBodyChange={bodyChangeHandler} onAuthorChange={authorChangeHandler}/>
+      {isPosting ?
+        <Modal onClose={onStopPosting}>
+        <NewPost 
+          onCancel={onStopPosting}
+          onAddPost={addPostHandler}/>
+      </Modal>
+      : null}
+
       <ul className={classes.post}>
-        <Post author={enteredAuthor} body={enteredBody} />
-        <Post author="Shaurya" body="Message from React too!" />
+        {posts.map((post, index)=><>{index} <Post key={post.id} author={post.author} body={post.body}/> </>)}
       </ul>
     </>
   );

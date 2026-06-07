@@ -1,18 +1,44 @@
 import {useState} from 'react';
 import classes from './NewPost.module.css';
+import { nanoid } from 'nanoid';
 
-function NewPost(props) {
+function NewPost({onCancel, onAddPost}) {
+  const [enteredBody,setEnteredBody] = useState('');
+  const [enteredAuthor,setEnteredAuthor] = useState('');
+
+  function bodyChangeHandler(event){
+    setEnteredBody(event.target.value);
+  }
+
+  function authorChangeHandler(event){
+    setEnteredAuthor(event.target.value);
+  }
+
+  function submitHandler(event){
+    console.log('submitting 1');
+    event.preventDefault();
+    console.log('submitting 2');
+    let postData = {id: nanoid(), body: enteredBody, author: enteredAuthor};
+    onAddPost(postData);
+    console.log(postData);
+    onCancel();
+  };
 
   return (
-    <form className={classes.form}>
+    <form className={classes.form} onSubmit={submitHandler}>
       <p>
         <label htmlFor="body">Text</label>
-        <textarea id="body" required rows={3} onChange={props.onBodyChange}/>
+        <textarea id="body" required rows={3} onChange={bodyChangeHandler}/>
       </p>
 
       <p>
         <label htmlFor="name">Your name</label>
-        <input type="text" id="name" required onChange={props.onAuthorChange}/>
+        <input type="text" id="name" required onChange={authorChangeHandler}/>
+      </p>
+
+      <p>
+        <button type="button" onClick={onCancel}>Cancel</button>
+        <button >Submit</button>
       </p>
     </form>
   );

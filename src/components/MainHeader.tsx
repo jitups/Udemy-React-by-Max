@@ -1,8 +1,8 @@
 import { MdPostAdd, MdMessage } from 'react-icons/md';
-
+import type { CreatePostProps } from '../types/Post';
 import classes from './MainHeader.module.css';
 
-function MainHeader({ onCreatePost }) {
+function MainHeader({ onCreatePost }: CreatePostProps) {
   return (
     <header className={classes.header}>
       <h1 className={classes.logo}>

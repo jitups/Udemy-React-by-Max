@@ -5,10 +5,11 @@ import NewPost from './NewPost';
 import Modal from './Modal';
 
 import classes from './PostList.module.css';
+import type { PostListProps, PostProps } from '../types/Post';
 
-function PostList({isPosting, onStopPosting}) {
+function PostList({isPosting, onStopPosting}:PostListProps) {
   console.log(isPosting);
-  const [posts, setPosts] = useState([]);
+  const [posts, setPosts] = useState<PostProps[]>([]);
 
   useEffect(() => {
     fetch('http://localhost:8080/posts')
@@ -18,7 +19,7 @@ function PostList({isPosting, onStopPosting}) {
       });
   }, []);
 
-  function addPostHandler(postData){
+  function addPostHandler(postData:PostProps){
     // need to add this code in this format, since new data is depends on old data
     fetch('http://localhost:8080/posts', {
       method: 'POST',
@@ -26,11 +27,10 @@ function PostList({isPosting, onStopPosting}) {
       headers: {
         'Content-Type': 'application/json'
       }
-    })
-    .then((response) => {
-      console.log('in PostList -> addPostHandler');
-      setPosts((existingPosts) => [postData, ... existingPosts]);
     });
+   
+      setPosts((existingPosts) => [postData, ... existingPosts]);
+
   }
 
   return (

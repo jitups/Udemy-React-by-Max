@@ -10,17 +10,20 @@ import type { PostListProps, PostProps } from '../types/Post';
 function PostList({isPosting, onStopPosting}:PostListProps) {
   console.log(isPosting);
   const [posts, setPosts] = useState<PostProps[]>([]);
-
-  useEffect(() => {
-    fetch('http://localhost:8080/posts')
-      .then((response) => response.json())
-      .then((data) => {
-        setPosts(data.posts);
-      });
-  }, []);
-
+  let isBackendAvailable = false;
+  if(isBackendAvailable){
+    useEffect(() => {
+      fetch('http://localhost:8080/posts')
+        .then((response) => response.json())
+        .then((data) => {
+          setPosts(data.posts);
+        });
+    }, []);
+  }
+  
   function addPostHandler(postData:PostProps){
-    // need to add this code in this format, since new data is depends on old data
+    if(isBackendAvailable){
+      // need to add this code in this format, since new data is depends on old data
     fetch('http://localhost:8080/posts', {
       method: 'POST',
       body: JSON.stringify(postData),
@@ -28,8 +31,9 @@ function PostList({isPosting, onStopPosting}:PostListProps) {
         'Content-Type': 'application/json'
       }
     });
-   
-      setPosts((existingPosts) => [postData, ... existingPosts]);
+    }
+    
+   setPosts((existingPosts) => [postData, ... existingPosts]);
 
   }
 

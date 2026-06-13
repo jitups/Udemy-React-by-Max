@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import Post from './Post';
 import NewPost from './NewPost';
 import Modal from './Modal';
+import API_ENDPOINTS from '../constants/Urls';
 
 import classes from './PostList.module.css';
 import type { PostListProps, PostProps } from '../types/Post';
@@ -14,7 +15,7 @@ function PostList({isPosting, onStopPosting}:PostListProps) {
   let isBackendAvailable = true;
   if(isBackendAvailable){
     useEffect(() => {
-      fetch('http://localhost:8080/posts')
+      fetch(API_ENDPOINTS.POSTS_URL)
         .then((response) => response.json())
         .then((data) => {
           setIsPostsLoading(true);
@@ -27,7 +28,7 @@ function PostList({isPosting, onStopPosting}:PostListProps) {
   function addPostHandler(postData:PostProps){
     if(isBackendAvailable){
       // need to add this code in this format, since new data is depends on old data
-    fetch('http://localhost:8080/posts', {
+    fetch(API_ENDPOINTS.POSTS_URL, {
       method: 'POST',
       body: JSON.stringify(postData),
       headers: {

@@ -10,13 +10,16 @@ import type { PostListProps, PostProps } from '../types/Post';
 function PostList({isPosting, onStopPosting}:PostListProps) {
   console.log(isPosting);
   const [posts, setPosts] = useState<PostProps[]>([]);
-  let isBackendAvailable = false;
+  const [isPostsLoading, setIsPostsLoading] = useState<boolean>(true);
+  let isBackendAvailable = true;
   if(isBackendAvailable){
     useEffect(() => {
       fetch('http://localhost:8080/posts')
         .then((response) => response.json())
         .then((data) => {
+          setIsPostsLoading(true);
           setPosts(data.posts);
+          setIsPostsLoading(false);
         });
     }, []);
   }
@@ -46,7 +49,8 @@ function PostList({isPosting, onStopPosting}:PostListProps) {
           onAddPost={addPostHandler}/>
       </Modal>
       : null}
-
+      {isPostsLoading && <p>Loading posts...</p>}
+      {!isPostsLoading && posts.length === 0 && <p className={classes.noPosts}>No posts yet!</p>}
       <ul className={classes.post}>
         {posts.map((post, index)=><>{index} <Post key={post.id} author={post.author} body={post.body}/> </>)}
       </ul>
